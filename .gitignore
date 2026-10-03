@@ -1,0 +1,36 @@
+# Gradle & Build files
+.gradle/
+build/
+*/build/
+Stayora/build/
+Stayora/app/build/
+**/build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+**/local.properties
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# OS / Temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Temporary Stitch inspection dumps
+img*.json
+stitch_*.json
+stitch_tools.json
+
+# IDE Agent metadata
+.gemini/
+.agent/
+.agents/
+.gsd/

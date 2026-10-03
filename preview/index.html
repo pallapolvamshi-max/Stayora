@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stayora — Find Your Space. Find Your People. | Student Hostels & Roommate Matching</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Stayora helps university students discover verified hostels, PGs, flats, and compatible roommates based on budget, campus proximity, amenities, and lifestyle personality.">
+  <meta name="keywords" content="student hostel, PG near Malla Reddy, roommate finder, student accommodation, college PG Hyderabad, Maisammaguda hostels">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23250065'/><path d='M30 70 L50 25 L70 70 L50 55 Z' fill='%23FF6B4A'/><circle cx='50' cy='32' r='8' fill='%23EDE9FE'/></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            stayora: {
+              dark: '#14032F',
+              purple: '#250065',
+              deep: '#3B1E7E',
+              violet: '#6B38D4',
+              lavender: '#8B5CF6',
+              softlavender: '#C4B5FD',
+              lightlavender: '#EDE9FE',
+              bglight: '#FAF7FF',
+              coral: '#FF6B4A',
+              coralhover: '#E85535',
+              corallight: '#FFE8E3',
+              cardborder: '#E8DCFC'
+            }
+          },
+          boxShadow: {
+            'glow-purple': '0 0 35px -5px rgba(107, 56, 212, 0.35)',
+            'glow-coral': '0 0 30px -5px rgba(255, 107, 74, 0.4)',
+            'card-hover': '0 20px 35px -10px rgba(37, 0, 101, 0.12)',
+            'phone-shadow': '0 30px 60px -15px rgba(20, 3, 47, 0.45)'
+          },
+          animation: {
+            'float-slow': 'float 5s ease-in-out infinite',
+            'float-reverse': 'floatRev 6s ease-in-out infinite',
+            'pulse-glow': 'pulseGlow 3s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            floatRev: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(10px) rotate(1deg)' },
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18, ReactDOM, Babel Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- GSAP 3 & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Canvas Confetti for Roommate Match Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAF7FF;
+      color: #14032F;
+      overflow-x: hidden;
+    }
+    
+    /* Glassmorphism helpers */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(232, 220, 252, 0.85);
+    }
+    .glass-card-dark {
+      background: rgba(37, 0, 101, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF7FF;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C4B5FD;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8B5CF6;
+    }
+
+    /* Range slider custom styling */
+    input[type=range] {
+      accent-color: #FF6B4A;
+    }
+
+    /* Gradient Text utility */
+    .text-gradient-purple {
+      background: linear-gradient(135deg, #250065 0%, #6B38D4 50%, #8B5CF6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .text-gradient-coral {
+      background: linear-gradient(135deg, #FF6B4A 0%, #FFA07A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="selection:bg-stayora-softlavender selection:text-stayora-purple">
+
+  <div id="root"></div>
+
+  <!-- React Application Logic with GSAP Animations -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // --- DEMO DATA: HOSTELS & PGS (5 BOYS + 5 GIRLS + CO-LIVING) ---
+    const HOSTEL_DATA = [
+      // 5 BOYS HOSTELS
+      {
+        id: 1,
+        title: "Stanza Living Greenfield Scholars PG",
+        tag: "🔥 Top Rated Boys PG",
+        type: "Boys Hostel",
+        sharing: "2 & 3 Sharing",
+        rent: "₹6,800",
+        period: "/month",
+        rating: 4.8,
+        reviews: 124,
+        distance: "0.6 km to MRU Gate 2",
+        campus: "Maisammaguda Main Rd",
+        image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=700&q=80",
+        amenities: ["High-Speed Wi-Fi", "3-Time South/North Food", "Biometric Lock", "Gym & Study Desk", "Inverter Backup"],
+        foodIncluded: true,
+        curfew: "10:30 PM",
+        badgeColor: "bg-stayora-corallight text-stayora-coral font-bold"
+      },
+      {
+        id: 2,
+        title: "Sri Sai Balaji Elite Residency & PG",
+        tag: "⚡ Value Winner",
+        type: "Boys Hostel",
+        sharing: "2, 3 & 4 Sharing",
+        rent: "₹5,500",
+        period: "/month",
+        rating: 4.6,
+        reviews: 89,
+        distance: "1.1 km to Dulapally Junction",
+        campus: "Kompally Bypass Road",
+        image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Andhra Mess", "Washing Machine", "Dual Router Wi-Fi", "Gym & TT Lounge", "24/7 Security"],
+        foodIncluded: true,
+        curfew: "10:00 PM",
+        badgeColor: "bg-purple-100 text-stayora-deep font-bold"
+      },
+      {
+        id: 3,
+        title: "Sri Sai Nilayam Executive Boys PG",
+        tag: "🏢 Walk to Gate 1",
+        type: "Boys Hostel",
+        sharing: "1, 2 & 3 Sharing AC",
+        rent: "₹6,400",
+        period: "/month",
+        rating: 4.9,
+        reviews: 112,
+        distance: "0.4 km to MRU Gate 1",
+        campus: "Maisammaguda Village Rd",
+        image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=700&q=80",
+        amenities: ["AC Rooms", "200 Mbps Fiber", "DG Generator Backup", "RO Water Coolers", "Daily Housekeeping"],
+        foodIncluded: true,
+        curfew: "10:30 PM",
+        badgeColor: "bg-amber-100 text-amber-900 font-bold"
+      },
+      {
+        id: 4,
+        title: "Venkateshwara Royal Boys Hostel",
+        tag: "🍗 Sunday Biryani",
+        type: "Boys Hostel",
+        sharing: "2 & 3 Sharing",
+        rent: "₹5,800",
+        period: "/month",
+        rating: 4.75,
+        reviews: 86,
+        distance: "0.7 km to Maisammaguda",
+        campus: "Beside MRU Sports Ground",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Unlimited Mess", "Bike Parking", "Solar Hot Water", "Fiber Wi-Fi", "Terrace Workout Zone"],
+        foodIncluded: true,
+        curfew: "10:15 PM",
+        badgeColor: "bg-blue-100 text-blue-900 font-bold"
+      },
+      {
+        id: 5,
+        title: "Balaji Tech Scholars Boys Living",
+        tag: "📚 24/7 Study Hall",
+        type: "Boys Hostel",
+        sharing: "3 & 4 Sharing",
+        rent: "₹5,200",
+        period: "/month",
+        rating: 4.82,
+        reviews: 98,
+        distance: "0.3 km to St. Martin's",
+        campus: "Dhulapally Village",
+        image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=700&q=80",
+        amenities: ["4-Time Food", "Study Reading Hall", "Fast Wi-Fi", "Automatic Washing Machine", "Inverter Backup"],
+        foodIncluded: true,
+        curfew: "10:00 PM",
+        badgeColor: "bg-emerald-100 text-emerald-900 font-bold"
+      },
+
+      // 5 GIRLS HOSTELS
+      {
+        id: 6,
+        title: "Serene Oasis Luxury Girls PG & Hostel",
+        tag: "🛡️ 24/7 Lady Warden",
+        type: "Girls Hostel",
+        sharing: "2 & 3 Sharing AC",
+        rent: "₹7,200",
+        period: "/month",
+        rating: 4.9,
+        reviews: 142,
+        distance: "0.8 km to MREC for Women",
+        campus: "Behind Women's College, Maisammaguda",
+        image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Biometric Access", "24/7 Lady Warden", "3 Meals + Evening Snacks", "Air Conditioned", "RO Mineral Water"],
+        foodIncluded: true,
+        curfew: "9:30 PM Strict",
+        badgeColor: "bg-rose-100 text-rose-800 font-bold"
+      },
+      {
+        id: 7,
+        title: "Vaishnavi Elite Girls Residency",
+        tag: "✨ Deluxe AC Living",
+        type: "Girls Hostel",
+        sharing: "Single & 2 Sharing AC",
+        rent: "₹7,900",
+        period: "/month",
+        rating: 4.95,
+        reviews: 218,
+        distance: "0.6 km to MLRIT & IARE",
+        campus: "Dundigal Rd, Maisammaguda",
+        image: "https://images.unsplash.com/photo-1540518614846-7ede433c4550?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Resident Lady Warden", "Full AC", "Attached Bathrooms", "Study Pods", "Washing Machines"],
+        foodIncluded: true,
+        curfew: "9:30 PM Strict",
+        badgeColor: "bg-purple-100 text-stayora-deep font-bold"
+      },
+      {
+        id: 8,
+        title: "Sri Gayatri Grand Executive Girls PG",
+        tag: "🔒 Zero Blind Spot CCTV",
+        type: "Girls Hostel",
+        sharing: "2 & 3 Sharing",
+        rent: "₹7,500",
+        period: "/month",
+        rating: 4.88,
+        reviews: 135,
+        distance: "0.5 km to MRUH Main Gate",
+        campus: "Beside MRU Central Library",
+        image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Biometric Gate", "Homely Andhra/North Food", "24/7 Female Warden", "Inverter Backup", "Ironing Room"],
+        foodIncluded: true,
+        curfew: "9:00 PM Sharp",
+        badgeColor: "bg-stayora-corallight text-stayora-coral font-bold"
+      },
+      {
+        id: 9,
+        title: "Kompally Pearl Women's Living & PG",
+        tag: "🚌 Free Bus Pick & Drop",
+        type: "Girls Hostel",
+        sharing: "2 & 3 Sharing AC",
+        rent: "₹6,900",
+        period: "/month",
+        rating: 4.82,
+        reviews: 74,
+        distance: "1.4 km to Cineplanet Kompally",
+        campus: "Kompally Bypass Road",
+        image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Elevator/Lift", "Solar Water", "24/7 Security", "Buffet Meals", "Free Campus Bus Service"],
+        foodIncluded: true,
+        curfew: "9:30 PM",
+        badgeColor: "bg-amber-100 text-amber-900 font-bold"
+      },
+      {
+        id: 10,
+        title: "Annapurna Divine Girls Hostel",
+        tag: "👩‍⚕️ Walk to Pharmacy Gate",
+        type: "Girls Hostel",
+        sharing: "2, 3 & 4 Sharing",
+        rent: "₹6,200",
+        period: "/month",
+        rating: 4.85,
+        reviews: 104,
+        distance: "0.4 km to MRCP Pharmacy Gate",
+        campus: "Behind MRCP Pharmacy Campus",
+        image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Hygienic Mess", "Study Balconies", "24/7 Lady Warden", "Solar Geysers", "Fast Wi-Fi"],
+        foodIncluded: true,
+        curfew: "9:00 PM",
+        badgeColor: "bg-rose-100 text-rose-800 font-bold"
+      },
+
+      // CO-LIVING / FLATS
+      {
+        id: 11,
+        title: "Campus Haven Co-Living Spaces",
+        tag: "⚡ Zero Brokerage",
+        type: "Co-Living / Flats",
+        sharing: "Private & 2BHK",
+        rent: "₹8,500",
+        period: "/month",
+        rating: 4.88,
+        reviews: 89,
+        distance: "1.2 km to Kompally Cineplanet",
+        campus: "Dulapally / Kompally",
+        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=700&q=80",
+        amenities: ["Gym & Gaming Lounge", "No Curfew", "Housekeeping", "Study Pods", "High Speed Fiber"],
+        foodIncluded: false,
+        curfew: "Flexible 24/7",
+        badgeColor: "bg-emerald-100 text-emerald-800 font-bold"
+      }
+    ];
+
+    // --- DEMO DATA: ROOMMATE MATCHES ---
+    const ROOMMATE_DATA = [
+      {
+        id: 1,
+        name: "Rahul Sharma",
+        branch: "3rd Year CSE • MRU",
+        hometown: "Warangal",
+        matchScore: 98,
+        avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80",
+        sleepCycle: "Night Owl (2 AM)",
+        lifestyle: "Study-Focused & Gamer",
+        personality: "Introvert / Focused",
+        tags: ["Night Coder", "Non-Smoker", "Veg/Non-Veg Ok", "Clean Desk", "Valorant"],
+        bio: "Prepping for off-campus placements. Quiet during weeknights, always up for tea breaks & late-night code reviews.",
+        lookingFor: "2-Sharing flat near Maisammaguda, max ₹7.5k"
+      },
+      {
+        id: 2,
+        name: "Ananya Reddy",
+        branch: "2nd Year AI & Data Science • MLRIT",
+        hometown: "Hyderabad",
+        matchScore: 94,
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
+        sleepCycle: "Early Riser (6 AM)",
+        lifestyle: "Organized & Academic",
+        personality: "Ambivert / Reader",
+        tags: ["Early Riser", "Pure Veg", "Bookworm", "Music Lover", "Gym Goer"],
+        bio: "Love an organized room and peaceful mornings for study. Looking for a neat and friendly female roommate.",
+        lookingFor: "AC 2-sharing room with food, max ₹8.5k"
+      },
+      {
+        id: 3,
+        name: "Karthik Verma",
+        branch: "4th Year ECE • CMR College",
+        hometown: "Karimnagar",
+        matchScore: 91,
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        sleepCycle: "Flexible (12 AM)",
+        lifestyle: "Travel Lover & Fitness",
+        personality: "Extrovert / Outgoing",
+        tags: ["Gym Enthusiast", "Weekend Traveler", "Foodie", "Badminton", "Chill"],
+        bio: "Fitness fanatic and weekend bike rider. Looking for easygoing roommates who love good food and healthy routines.",
+        lookingFor: "Single or 2-Sharing near Dulapally, max ₹7k"
+      },
+      {
+        id: 4,
+        name: "Pooja Patel",
+        branch: "3rd Year B.Pharmacy • MRCP",
+        hometown: "Nizamabad",
+        matchScore: 89,
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        sleepCycle: "Early Riser (6:30 AM)",
+        lifestyle: "Study-Focused & Creative",
+        personality: "Introvert / Tea Lover",
+        tags: ["Pharma Research", "Quiet Hours", "Cleanliness 10/10", "Chai Addict"],
+        bio: "Mostly in college labs or studying for competitive exams. Values mutual respect, quiet study hours, and hygiene.",
+        lookingFor: "Girls PG within 500m of Pharmacy campus"
+      }
+    ];
+
+    // --- DEMO DATA: NEARBY SAFETY & ESSENTIALS ---
+    const ESSENTIALS_DATA = [
+      {
+        id: 1,
+        name: "Malla Reddy Narayana Multi-Speciality Hospital",
+        category: "Emergency & Healthcare",
+        distance: "0.5 km",
+        time: "4 mins walk",
+        icon: "fa-hospital",
+        badge: "24/7 Trauma Care",
+        color: "text-rose-600 bg-rose-50",
+        desc: "Equipped with round-the-clock emergency casualty, student cashless insurance desk, and 24/7 pharmacy counter."
+      },
+      {
+        id: 2,
+        name: "Maisammaguda TSRTC Bus Terminal",
+        category: "Public Transit Hub",
+        distance: "0.3 km",
+        time: "3 mins walk",
+        icon: "fa-bus-simple",
+        badge: "Direct Routes 229, 227",
+        color: "text-stayora-violet bg-purple-50",
+        desc: "Regular city bus connectivity to Secunderabad Station, JNTU, Balanagar, Jubilee Bus Stand, and MGBS."
+      },
+      {
+        id: 3,
+        name: "Apollo 24/7 & MedPlus Pharmacy",
+        category: "Medical & Health Supplies",
+        distance: "0.4 km",
+        time: "3 mins walk",
+        icon: "fa-prescription-bottle-medical",
+        badge: "Open 24 Hours",
+        color: "text-emerald-600 bg-emerald-50",
+        desc: "Instant doorstep delivery for hostel students. Genuine prescription meds, first-aid kits, and health essentials."
+      },
+      {
+        id: 4,
+        name: "Maisammaguda Police Outpost & SHE Team",
+        category: "Campus Safety & Law",
+        distance: "0.6 km",
+        time: "5 mins walk",
+        icon: "fa-shield-halved",
+        badge: "24/7 Active Patrols",
+        color: "text-blue-600 bg-blue-50",
+        desc: "Dedicated student safety helpline, street CCTV monitoring, and rapid emergency intervention squad."
+      },
+      {
+        id: 5,
+        name: "SBI & HDFC 24-Hr ATM Booths",
+        category: "Banking & Financials",
+        distance: "0.2 km",
+        time: "2 mins walk",
+        icon: "fa-building-columns",
+        badge: "Zero-Downtime Cash",
+        color: "text-amber-600 bg-amber-50",
+        desc: "Safe, well-lit ATM kiosks with cash deposit machines, UPI kiosks, and student zero-balance account counters."
+      },
+      {
+        id: 6,
+        name: "Campus Student Bazaar & Fresh Mart",
+        category: "Groceries & Stationery",
+        distance: "0.3 km",
+        time: "3 mins walk",
+        icon: "fa-basket-shopping",
+        badge: "Student Discount 10%",
+        color: "text-stayora-coral bg-orange-50",
+        desc: "Fresh fruits, dairy milk, hostel snacks, photocopying, engineering record books, and laundry drop-off."
+      }
+    ];
+
+    // --- DEMO DATA: TESTIMONIALS ---
+    const TESTIMONIALS = [
+      {
+        id: 1,
+        name: "Sneha Pabbathi",
+        role: "B.Tech CSE '26 • Malla Reddy University",
+        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+        rating: 5,
+        text: "Finding a reliable girls PG near Maisammaguda without paying broker commissions used to be a nightmare. On Stayora, I filtered by 'Lady Warden' and 'AC 2-Sharing' and matched with Sneha who is also an AI nerd. We've been roommates for 2 semesters now!",
+        tag: "Matched 98% Compatibility"
+      },
+      {
+        id: 2,
+        name: "Vikram Kothari",
+        role: "Mechanical Engg '25 • MLR Institute of Tech",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+        rating: 5,
+        text: "The distance slider is the best feature hands down. I locked a room exactly 400m from my college gate. I walk to 8:30 AM workshops easily, food is hygienic, and there are zero surprise electricity bills.",
+        tag: "Verified Resident"
+      },
+      {
+        id: 3,
+        name: "Divya Manoharan",
+        role: "Pharm.D '27 • Malla Reddy College of Pharmacy",
+        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+        rating: 5,
+        text: "My parents were nervous about me moving to Hyderabad from Chennai. The verified safety section showing the hospital 500m away and 24/7 CCTV gave them instant peace of mind. Truly built for students!",
+        tag: "Safety Verified"
+      }
+    ];
+
+    // ==========================================
+    // MAIN APP COMPONENT
+    // ==========================================
+    function App() {
+      // --- State for Interactive Preferences ---
+      const [budget, setBudget] = useState(7000);
+      const [distance, setDistance] = useState("under1km");
+      const [personality, setPersonality] = useState("nightowl");
+      const [studyHabit, setStudyHabit] = useState("study");
+      const [amenityFilter, setAmenityFilter] = useState(["WiFi", "Food"]);
+      const [activeTab, setActiveTab] = useState("hostels");
+      const [likedRoommates, setLikedRoommates] = useState({});
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+      const [activePhoneTab, setActivePhoneTab] = useState("rooms");
+
+      // Ref container for GSAP Context
+      const mainRef = useRef(null);
+
+      // --- Interactive Amenity Toggle ---
+      const toggleAmenity = (name) => {
+        if (amenityFilter.includes(name)) {
+          setAmenityFilter(amenityFilter.filter(a => a !== name));
+        } else {
+          setAmenityFilter([...amenityFilter, name]);
+        }
+      };
+
+      // --- Calculate Compatibility dynamically based on selected preferences ---
+      const calculateCompatibility = () => {
+        let base = 75;
+        if (budget >= 6000 && budget <= 8500) base += 10;
+        if (distance === "under1km") base += 8;
+        if (personality === "nightowl" || personality === "introvert") base += 4;
+        if (amenityFilter.length >= 3) base += 3;
+        return Math.min(base, 99);
+      };
+
+      // --- Roommate Heart Animation & Confetti Trigger ---
+      const handleLikeRoommate = (id, name) => {
+        setLikedRoommates(prev => {
+          const next = { ...prev, [id]: !prev[id] };
+          if (next[id]) {
+            // Trigger Confetti!
+            if (window.confetti) {
+              window.confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.75 },
+                colors: ['#250065', '#8B5CF6', '#FF6B4A', '#EDE9FE']
+              });
+            }
+          }
+          return next;
+        });
+      };
+
+      // --- GSAP ANIMATIONS SETUP ---
+      useEffect(() => {
+        // Register GSAP Plugin
+        if (window.gsap && window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+
+          const ctx = gsap.context(() => {
+            // 1. Hero text fade & move up on initial load
+            const heroTl = gsap.timeline();
+            heroTl.from(".gsap-hero-title", {
+              opacity: 0,
+              y: 50,
+              duration: 1.1,
+              ease: "power3.out"
+            })
+            .from(".gsap-hero-sub", {
+              opacity: 0,
+              y: 30,
+              duration: 0.9,
+              ease: "power3.out"
+            }, "-=0.7")
+            .from(".gsap-hero-badges", {
+              opacity: 0,
+              y: 20,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "power2.out"
+            }, "-=0.6")
+            .from(".gsap-hero-cta", {
+              opacity: 0,
+              scale: 0.9,
+              duration: 0.8,
+              ease: "back.out(1.7)"
+            }, "-=0.5");
+
+            // 2. Phone Mockup slide in from right and gently float
+            gsap.from(".gsap-phone-mockup", {
+              opacity: 0,
+              x: 100,
+              duration: 1.3,
+              ease: "power3.out",
+              delay: 0.3
+            });
+
+            // Phone floating animation
+            gsap.to(".gsap-phone-floating-container", {
+              y: -14,
+              duration: 3.2,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut"
+            });
+
+            // 3. Map Pins soft pulse
+            gsap.to(".gsap-map-pin", {
+              scale: 1.09,
+              duration: 1.8,
+              repeat: -1,
+              yoyo: true,
+              stagger: 0.35,
+              ease: "sine.inOut"
+            });
+
+            // 4. Feature and Preference cards stagger into view on scroll
+            gsap.utils.toArray(".gsap-stagger-card").forEach((card, index) => {
+              gsap.from(card, {
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 85%",
+                  toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 40,
+                duration: 0.7,
+                delay: (index % 3) * 0.12,
+                ease: "power2.out"
+              });
+            });
+
+            // 5. Roommate match cards slide in together
+            gsap.from(".gsap-roommate-card", {
+              scrollTrigger: {
+                trigger: "#roommates-section",
+                start: "top 78%",
+                toggleActions: "play none none none"
+              },
+              opacity: 0,
+              y: 50,
+              stagger: 0.16,
+              duration: 0.8,
+              ease: "power3.out"
+            });
+
+            // 6. How it works steps staggered animation
+            gsap.from(".gsap-step-card", {
+              scrollTrigger: {
+                trigger: "#how-it-works",
+                start: "top 80%",
+                toggleActions: "play none none none"
+              },
+              opacity: 0,
+              y: 45,
+              stagger: 0.22,
+              duration: 0.8,
+              ease: "power2.out"
+            });
+
+            // 7. Statistics counter animation
+            ScrollTrigger.create({
+              trigger: "#stats-section",
+              start: "top 85%",
+              once: true,
+              onEnter: () => {
+                const counters = document.querySelectorAll(".gsap-stat-counter");
+                counters.forEach(counter => {
+                  const target = parseInt(counter.getAttribute("data-target"), 10);
+                  gsap.to(counter, {
+                    innerHTML: target,
+                    duration: 2.2,
+                    ease: "power2.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function() {
+                      counter.innerText = Math.ceil(this.targets()[0].innerHTML).toLocaleString();
+                    }
+                  });
+                });
+              }
+            });
+
+          }, mainRef);
+
+          return () => ctx.revert();
+        }
+      }, []);
+
+      return (
+        <div ref={mainRef} className="min-h-screen flex flex-col bg-stayora-bglight overflow-x-hidden">
+
+          {/* ========================================================= */}
+          {/* SECTION 1: MODERN RESPONSIVE NAVBAR                      */}
+          {/* ========================================================= */}
+          <header className="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-stayora-cardborder/60 transition-all duration-300">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+              
+              {/* Brand Logo & Campus Pill */}
+              <div className="flex items-center gap-3">
+                <a href="#" className="flex items-center gap-2.5 group">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-stayora-purple via-stayora-deep to-stayora-violet flex items-center justify-center text-white shadow-md shadow-stayora-purple/20 group-hover:scale-105 transition-transform duration-300">
+                    <i className="fa-solid fa-hotel text-lg text-stayora-coral"></i>
+                  </div>
+                  <div>
+                    <span className="text-2xl font-black tracking-tight text-stayora-purple">
+                      Stay<span className="text-stayora-coral">ora</span>
+                    </span>
+                    <span className="block text-[10px] font-bold text-stayora-violet uppercase tracking-widest -mt-1">
+                      Campus Living
+                    </span>
+                  </div>
+                </a>
+
+                <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-stayora-lightlavender text-stayora-deep text-xs font-semibold border border-purple-200">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Maisammaguda & Kompally Verified</span>
+                </div>
+              </div>
+
+              {/* Desktop Nav Links */}
+              <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-gray-700">
+                <a href="#hostels" className="hover:text-stayora-violet transition-colors">Find Hostels</a>
+                <a href="#roommates-section" className="hover:text-stayora-violet transition-colors flex items-center gap-1.5">
+                  <span>Roommate Match</span>
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold bg-stayora-corallight text-stayora-coral rounded-md">New</span>
+                </a>
+                <a href="#preferences" className="hover:text-stayora-violet transition-colors">Preferences</a>
+                <a href="#how-it-works" className="hover:text-stayora-violet transition-colors">How It Works</a>
+                <a href="#safety" className="hover:text-stayora-violet transition-colors">Campus Safety</a>
+                <a href="#testimonials" className="hover:text-stayora-violet transition-colors">Reviews</a>
+              </nav>
+
+              {/* CTAs */}
+              <div className="hidden sm:flex items-center gap-3">
+                <a 
+                  href="mobile_simulator.html" 
+                  className="px-4 py-2.5 rounded-full text-xs font-bold text-stayora-purple hover:bg-stayora-lightlavender transition-all flex items-center gap-2 border border-purple-200"
+                  title="Open mobile app simulator"
+                >
+                  <i className="fa-solid fa-mobile-screen-button text-stayora-violet"></i>
+                  <span>Test Mobile App</span>
+                </a>
+
+                <a 
+                  href="#hostels" 
+                  className="px-6 py-2.5 rounded-full text-sm font-bold text-white bg-gradient-to-r from-stayora-purple via-stayora-deep to-stayora-violet hover:from-stayora-deep hover:to-stayora-coral shadow-md shadow-stayora-purple/25 hover:shadow-lg hover:shadow-stayora-coral/20 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                >
+                  <span>Get Started</span>
+                  <i className="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+              </div>
+
+              {/* Mobile Hamburger Button */}
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2 rounded-xl text-stayora-purple hover:bg-stayora-lightlavender focus:outline-none"
+                aria-label="Toggle navigation menu"
+              >
+                <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-xl`}></i>
+              </button>
+            </div>
+
+            {/* Mobile Dropdown Menu */}
+            {mobileMenuOpen && (
+              <div className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-purple-100 px-6 py-5 flex flex-col gap-4 shadow-xl">
+                <a 
+                  href="#hostels" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-gray-800 hover:text-stayora-violet py-1"
+                >
+                  Find Hostels & PGs
+                </a>
+                <a 
+                  href="#roommates-section" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-gray-800 hover:text-stayora-violet py-1 flex items-center justify-between"
+                >
+                  <span>Roommate Match</span>
+                  <span className="text-xs bg-stayora-corallight text-stayora-coral px-2 py-0.5 rounded-full font-bold">AI Match</span>
+                </a>
+                <a 
+                  href="#preferences" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-gray-800 hover:text-stayora-violet py-1"
+                >
+                  Custom Preferences Quiz
+                </a>
+                <a 
+                  href="#how-it-works" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-gray-800 hover:text-stayora-violet py-1"
+                >
+                  How It Works
+                </a>
+                <a 
+                  href="#safety" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-gray-800 hover:text-stayora-violet py-1"
+                >
+                  Nearby Hospitals & Safety
+                </a>
+                <div className="pt-3 border-t border-gray-100 flex flex-col gap-2.5">
+                  <a 
+                    href="mobile_simulator.html"
+                    className="w-full py-3 rounded-full text-center text-sm font-bold bg-stayora-lightlavender text-stayora-purple"
+                  >
+                    Open Interactive App Demo
+                  </a>
+                  <a 
+                    href="#hostels" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-3 rounded-full text-center text-sm font-bold bg-stayora-purple text-white shadow-md shadow-stayora-purple/30"
+                  >
+                    Get Started Free
+                  </a>
+                </div>
+              </div>
+            )}
+          </header>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 2, 3 & 4: HERO + ANIMATED PHONE + FLOATING PINS   */}
+          {/* ========================================================= */}
+          <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+            
+            {/* Ambient Glowing Blobs */}
+            <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-stayora-lightlavender/60 via-purple-100/40 to-stayora-corallight/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+            <div className="absolute top-40 right-[-100px] w-96 h-96 bg-stayora-softlavender/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+            
+            {/* --- SECTION 4: FLOATING MAP PINS & APARTMENT ICONS --- */}
+            {/* Pin 1: MRU Campus */}
+            <div className="gsap-map-pin hidden xl:flex absolute top-36 left-12 items-center gap-2 px-3.5 py-2 rounded-2xl glass-card shadow-lg shadow-purple-900/5 border border-purple-200/80 animate-float-slow z-10">
+              <div className="w-8 h-8 rounded-full bg-stayora-purple text-white flex items-center justify-center text-xs">
+                <i className="fa-solid fa-graduation-cap text-stayora-coral"></i>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-900 leading-tight">Malla Reddy Univ.</p>
+                <p className="text-[10px] font-semibold text-stayora-violet">📍 0.4 km proximity</p>
+              </div>
+            </div>
+
+            {/* Pin 2: Maisammaguda Hub */}
+            <div className="gsap-map-pin hidden xl:flex absolute bottom-24 left-1/4 items-center gap-2 px-3.5 py-2 rounded-2xl glass-card shadow-lg shadow-purple-900/5 border border-purple-200/80 animate-float-reverse z-10">
+              <div className="w-8 h-8 rounded-full bg-stayora-coral text-white flex items-center justify-center text-xs">
+                <i className="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-900 leading-tight">Maisammaguda Food St.</p>
+                <p className="text-[10px] font-semibold text-stayora-coral">🔥 45+ Hostels & Cafes</p>
+              </div>
+            </div>
+
+            {/* Pin 3: Kompally & Dulapally */}
+            <div className="gsap-map-pin hidden lg:flex absolute top-28 right-16 items-center gap-2 px-3.5 py-2 rounded-2xl glass-card shadow-lg shadow-purple-900/5 border border-purple-200/80 animate-float-slow z-10">
+              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">
+                <i className="fa-solid fa-shield-halved"></i>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-900 leading-tight">100% Verified Stays</p>
+                <p className="text-[10px] font-semibold text-emerald-600">Physical Warden Checked</p>
+              </div>
+            </div>
+
+            {/* Pin 4: St. Martin's & MLRIT Pin */}
+            <div className="gsap-map-pin hidden lg:flex absolute bottom-20 right-1/3 items-center gap-2 px-3 py-1.5 rounded-2xl glass-card shadow-lg shadow-purple-900/5 border border-purple-200/80 animate-float-reverse z-10">
+              <div className="w-7 h-7 rounded-full bg-stayora-deep text-white flex items-center justify-center text-xs">
+                <i className="fa-solid fa-heart text-stayora-coral"></i>
+              </div>
+              <span className="text-xs font-bold text-stayora-deep">98% Roommate Match</span>
+            </div>
+
+
+            {/* Hero Main Grid */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                {/* Hero Left Content */}
+                <div className="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
+                  
+                  {/* Trust Badge */}
+                  <div className="gsap-hero-badges flex items-center justify-center lg:justify-start">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white shadow-sm border border-purple-200/80 text-xs font-semibold text-gray-800">
+                      <div className="flex -space-x-1.5 items-center">
+                        <img className="w-5 h-5 rounded-full border border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="student"/>
+                        <img className="w-5 h-5 rounded-full border border-white object-cover" src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=100&q=80" alt="student"/>
+                        <img className="w-5 h-5 rounded-full border border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="student"/>
+                      </div>
+                      <div className="flex items-center gap-1 text-amber-500">
+                        <i className="fa-solid fa-star text-[11px]"></i>
+                        <span className="font-bold text-gray-900 text-xs">4.9/5</span>
+                      </div>
+                      <span className="text-gray-400">•</span>
+                      <span className="text-stayora-deep font-bold">4,800+ Students</span>
+                      <span className="text-gray-500 hidden sm:inline">across Maisammaguda Campuses</span>
+                    </div>
+                  </div>
+
+                  {/* Main Headline */}
+                  <h1 className="gsap-hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-stayora-dark leading-[1.12]">
+                    Find Your Space.<br/>
+                    <span className="text-gradient-purple">Find Your People.</span>
+                    <span className="inline-block ml-2 text-stayora-coral">✨</span>
+                  </h1>
+
+                  {/* Subtext */}
+                  <p className="gsap-hero-sub text-lg sm:text-xl text-gray-600 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                    The smart student accommodation and roommate matching platform. Discover verified hostels, PGs, and rooms near your campus with zero brokerage, transparent rules, and AI roommate vibe matching.
+                  </p>
+
+                  {/* Feature Highlights Pills */}
+                  <div className="gsap-hero-badges flex flex-wrap gap-2.5 justify-center lg:justify-start">
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-100 text-stayora-deep flex items-center gap-1.5">
+                      <i className="fa-solid fa-bolt text-stayora-coral"></i> ₹0 Brokerage Fees
+                    </span>
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-100 text-stayora-deep flex items-center gap-1.5">
+                      <i className="fa-solid fa-user-group text-stayora-violet"></i> Sleep Cycle & Vibe Match
+                    </span>
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-100 text-stayora-deep flex items-center gap-1.5">
+                      <i className="fa-solid fa-shield-heart text-emerald-600"></i> Verified Wardens & Security
+                    </span>
+                  </div>
+
+                  {/* Search Bar Widget in Hero */}
+                  <div className="gsap-hero-cta mt-2 p-3 sm:p-4 rounded-3xl glass-card shadow-xl shadow-purple-900/10 border border-purple-200/90 flex flex-col md:flex-row items-center gap-3">
+                    <div className="w-full md:w-1/3 flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-stayora-bglight border border-purple-100">
+                      <i className="fa-solid fa-location-dot text-stayora-coral"></i>
+                      <div className="text-left">
+                        <label className="block text-[10px] uppercase font-bold tracking-wider text-gray-400">Campus Location</label>
+                        <select className="bg-transparent text-xs font-bold text-gray-900 focus:outline-none w-full cursor-pointer">
+                          <option>Malla Reddy (MRU/MREC)</option>
+                          <option>MLRIT / IARE Dundigal</option>
+                          <option>St. Martin's Dhulapally</option>
+                          <option>CMRIT Kandlakoya</option>
+                          <option>Kompally Junction</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="w-full md:w-1/3 flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-stayora-bglight border border-purple-100">
+                      <i className="fa-solid fa-indian-rupee-sign text-stayora-violet"></i>
+                      <div className="text-left">
+                        <label className="block text-[10px] uppercase font-bold tracking-wider text-gray-400">Max Budget</label>
+                        <select className="bg-transparent text-xs font-bold text-gray-900 focus:outline-none w-full cursor-pointer">
+                          <option>Up to ₹6,500/mo</option>
+                          <option>Up to ₹8,000/mo (Recommended)</option>
+                          <option>Up to ₹10,000/mo (AC)</option>
+                          <option>Any Budget</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <a 
+                      href="#hostels" 
+                      className="w-full md:w-auto md:flex-1 py-3 px-6 rounded-2xl font-bold text-sm text-white bg-stayora-coral hover:bg-stayora-coralhover shadow-md shadow-stayora-coral/30 hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
+                    >
+                      <i className="fa-solid fa-magnifying-glass"></i>
+                      <span>Search Stays</span>
+                    </a>
+                  </div>
+
+                  {/* Secondary Social Validation */}
+                  <div className="flex items-center justify-center lg:justify-start gap-6 pt-2 text-xs text-gray-500 font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <i className="fa-solid fa-circle-check text-emerald-500"></i> No advance lock-in scams
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <i className="fa-solid fa-circle-check text-emerald-500"></i> Real student reviews
+                    </span>
+                  </div>
+
+                </div>
+
+                {/* --- SECTION 3: ANIMATED SMARTPHONE MOCKUP --- */}
+                <div className="lg:col-span-5 flex justify-center gsap-phone-mockup">
+                  <div className="gsap-phone-floating-container relative">
+                    
+                    {/* Glowing Backlight behind phone */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-stayora-violet/30 to-stayora-coral/20 rounded-[50px] blur-2xl transform scale-105 pointer-events-none"></div>
+
+                    {/* Floating Match Pill hanging off phone top-left */}
+                    <div className="absolute -top-4 -left-6 z-30 px-3.5 py-2 rounded-2xl bg-white shadow-xl shadow-purple-950/15 border border-purple-200 flex items-center gap-2.5 animate-float-slow">
+                      <div className="w-7 h-7 rounded-full bg-stayora-corallight text-stayora-coral flex items-center justify-center text-xs font-black">
+                        <i className="fa-solid fa-fire"></i>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 font-semibold">Live Compatibility</p>
+                        <p className="text-xs font-extrabold text-stayora-purple">98% Rahul S. (CSE)</p>
+                      </div>
+                    </div>
+
+                    {/* Floating Verified Pill hanging off phone bottom-right */}
+                    <div className="absolute -bottom-5 -right-6 z-30 px-3.5 py-2 rounded-2xl bg-white shadow-xl shadow-purple-950/15 border border-purple-200 flex items-center gap-2.5 animate-float-reverse">
+                      <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-black">
+                        <i className="fa-solid fa-check"></i>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-500 font-semibold">Physical Inspection</p>
+                        <p className="text-xs font-extrabold text-emerald-700">Warden & CCTV Verified</p>
+                      </div>
+                    </div>
+
+                    {/* iPhone 16 Pro Frame */}
+                    <div className="relative w-[310px] sm:w-[330px] h-[640px] bg-slate-900 rounded-[50px] p-3 shadow-phone-shadow border-[4px] border-slate-700/80">
+                      
+                      {/* Dynamic Island Notch */}
+                      <div className="absolute top-5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full z-40 flex items-center justify-between px-3">
+                        <div className="w-2.5 h-2.5 rounded-full bg-slate-900"></div>
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 animate-pulse"></div>
+                      </div>
+
+                      {/* Phone Screen Display */}
+                      <div className="w-full h-full bg-[#FAF7FF] rounded-[40px] overflow-hidden flex flex-col pt-7 relative select-none">
+                        
+                        {/* App Header inside phone */}
+                        <div className="px-4 py-2 flex items-center justify-between border-b border-purple-100 bg-white">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-extrabold text-stayora-purple">Stay<span className="text-stayora-coral">ora</span></span>
+                            <span className="text-[9px] bg-stayora-lightlavender text-stayora-deep px-1.5 py-0.5 rounded font-bold">MRU Hub</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <i className="fa-regular fa-bell text-gray-500 text-xs"></i>
+                          </div>
+                        </div>
+
+                        {/* Interactive Tab bar inside Phone */}
+                        <div className="px-4 pt-2 pb-1 bg-white flex gap-2">
+                          <button 
+                            onClick={() => setActivePhoneTab("rooms")}
+                            className={`flex-1 py-1.5 rounded-xl text-[11px] font-bold transition-all ${activePhoneTab === 'rooms' ? 'bg-stayora-purple text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
+                          >
+                            Hostels (42)
+                          </button>
+                          <button 
+                            onClick={() => setActivePhoneTab("roommates")}
+                            className={`flex-1 py-1.5 rounded-xl text-[11px] font-bold transition-all ${activePhoneTab === 'roommates' ? 'bg-stayora-purple text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}
+                          >
+                            Roommates (18)
+                          </button>
+                        </div>
+
+                        {/* Scrollable Feed inside Phone */}
+                        <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                          
+                          {activePhoneTab === 'rooms' ? (
+                            <>
+                              {/* Mini Property Card 1 */}
+                              <div className="p-2.5 rounded-2xl bg-white shadow-sm border border-purple-100">
+                                <div className="relative h-28 rounded-xl overflow-hidden mb-2">
+                                  <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=400&q=80" alt="Hostel" className="w-full h-full object-cover"/>
+                                  <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-stayora-purple text-white text-[9px] font-bold">
+                                    0.4 km to MRU
+                                  </span>
+                                  <span className="absolute bottom-1.5 right-1.5 px-2 py-0.5 rounded-md bg-white/95 text-stayora-deep text-[10px] font-extrabold shadow">
+                                    ₹6,800/mo
+                                  </span>
+                                </div>
+                                <h4 className="text-xs font-bold text-gray-900 leading-tight">Sri Sai Nilayam Boys PG</h4>
+                                <div className="flex items-center justify-between mt-1 text-[10px] text-gray-500">
+                                  <span className="text-emerald-700 font-semibold">✓ Food + WiFi + RO</span>
+                                  <span className="text-amber-500 font-bold">★ 4.9 (142)</span>
+                                </div>
+                              </div>
+
+                              {/* Mini Property Card 2 */}
+                              <div className="p-2.5 rounded-2xl bg-white shadow-sm border border-purple-100">
+                                <div className="relative h-28 rounded-xl overflow-hidden mb-2">
+                                  <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=400&q=80" alt="Hostel" className="w-full h-full object-cover"/>
+                                  <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-stayora-deep text-white text-[9px] font-bold">
+                                    Girls Only
+                                  </span>
+                                  <span className="absolute bottom-1.5 right-1.5 px-2 py-0.5 rounded-md bg-white/95 text-stayora-deep text-[10px] font-extrabold shadow">
+                                    ₹7,900/mo
+                                  </span>
+                                </div>
+                                <h4 className="text-xs font-bold text-gray-900 leading-tight">Vaishnavi Elite Residency</h4>
+                                <div className="flex items-center justify-between mt-1 text-[10px] text-gray-500">
+                                  <span className="text-purple-700 font-semibold">✓ Lady Warden • AC</span>
+                                  <span className="text-amber-500 font-bold">★ 4.95 (218)</span>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {/* Mini Roommate Match Card 1 */}
+                              <div className="p-3 rounded-2xl bg-white shadow-sm border border-purple-100 flex flex-col gap-2">
+                                <div className="flex items-center gap-2.5">
+                                  <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=100&q=80" alt="Rahul" className="w-10 h-10 rounded-full object-cover border-2 border-stayora-coral"/>
+                                  <div>
+                                    <div className="flex items-center gap-1.5">
+                                      <h5 className="text-xs font-bold text-gray-900">Rahul S.</h5>
+                                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-stayora-corallight text-stayora-coral">98% Match</span>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500">CSE 3rd Year • Night Owl</p>
+                                  </div>
+                                </div>
+                                <div className="flex flex-wrap gap-1">
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-stayora-purple font-medium">Study-Focused</span>
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-stayora-purple font-medium">Non-Smoker</span>
+                                </div>
+                              </div>
+
+                              {/* Mini Roommate Match Card 2 */}
+                              <div className="p-3 rounded-2xl bg-white shadow-sm border border-purple-100 flex flex-col gap-2">
+                                <div className="flex items-center gap-2.5">
+                                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Ananya" className="w-10 h-10 rounded-full object-cover border-2 border-stayora-violet"/>
+                                  <div>
+                                    <div className="flex items-center gap-1.5">
+                                      <h5 className="text-xs font-bold text-gray-900">Ananya R.</h5>
+                                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-purple-100 text-stayora-deep">94% Match</span>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500">AI & DS 2nd Yr • Early Riser</p>
+                                  </div>
+                                </div>
+                                <div className="flex flex-wrap gap-1">
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-stayora-purple font-medium">Quiet Study</span>
+                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-stayora-purple font-medium">Pure Veg</span>
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                        </div>
+
+                        {/* Bottom Navigation inside Phone */}
+                        <div className="h-12 bg-white border-t border-purple-100 flex items-center justify-around text-gray-400">
+                          <i className="fa-solid fa-house text-stayora-purple text-xs"></i>
+                          <i className="fa-solid fa-compass text-xs"></i>
+                          <i className="fa-solid fa-user-group text-xs"></i>
+                          <i className="fa-solid fa-comment-dots text-xs"></i>
+                          <i className="fa-solid fa-circle-user text-xs"></i>
+                        </div>
+
+                        {/* Phone Home Bar */}
+                        <div className="w-24 h-1 bg-gray-300 rounded-full mx-auto my-1"></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 5: INTERACTIVE PREFERENCE & COMPATIBILITY CARDS   */}
+          {/* ========================================================= */}
+          <section id="preferences" className="py-20 bg-white border-y border-purple-100 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Header */}
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-stayora-lightlavender text-stayora-deep border border-purple-200">
+                  🎯 Personalization Engine
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                  Your Preferences. <span className="text-gradient-purple">Perfect Harmony.</span>
+                </h2>
+                <p className="text-base text-gray-600 mt-3">
+                  Adjust budget, college proximity, and roommate lifestyle habits to calculate your live Compatibility Score and filter verified student rooms.
+                </p>
+              </div>
+
+              {/* 4 Preferences Interactive Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                {/* 1. Budget Card */}
+                <div className="gsap-stagger-card p-6 rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-purple-100 text-stayora-purple flex items-center justify-center text-xl mb-4">
+                      <i className="fa-solid fa-wallet text-stayora-coral"></i>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Budget Range</h3>
+                    <p className="text-xs text-gray-500 mt-1">Monthly rent including food and utilities</p>
+                    
+                    <div className="mt-6 mb-2">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-2xl font-black text-stayora-purple">₹{budget.toLocaleString()}</span>
+                        <span className="text-xs font-semibold text-gray-500">/ month</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="4000" 
+                        max="14000" 
+                        step="500"
+                        value={budget} 
+                        onChange={(e) => setBudget(Number(e.target.value))}
+                        className="w-full mt-3 cursor-pointer"
+                      />
+                      <div className="flex justify-between text-[11px] text-gray-400 mt-1 font-semibold">
+                        <span>₹4,000 (Sharing)</span>
+                        <span>₹14,000 (Studio AC)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-purple-100 flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Estimated Stays:</span>
+                    <span className="font-extrabold text-stayora-deep">38 Properties</span>
+                  </div>
+                </div>
+
+                {/* 2. College Distance Card */}
+                <div className="gsap-stagger-card p-6 rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-purple-100 text-stayora-purple flex items-center justify-center text-xl mb-4">
+                      <i className="fa-solid fa-person-walking text-stayora-violet"></i>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">College Distance</h3>
+                    <p className="text-xs text-gray-500 mt-1">Maximum travel time to campus gates</p>
+
+                    <div className="mt-5 space-y-2">
+                      {[
+                        { id: "under1km", label: "< 1 km (Walk in 5 mins)", icon: "fa-person-walking" },
+                        { id: "under3km", label: "1 - 3 km (Cycle / Auto)", icon: "fa-bicycle" },
+                        { id: "under5km", label: "3 - 5 km (Metro / Bus)", icon: "fa-bus" }
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => setDistance(item.id)}
+                          className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold text-left flex items-center justify-between transition-all ${
+                            distance === item.id 
+                              ? 'bg-stayora-purple text-white shadow-sm' 
+                              : 'bg-white text-gray-700 hover:bg-purple-50'
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <i className={`fa-solid ${item.icon}`}></i>
+                            {item.label}
+                          </span>
+                          {distance === item.id && <i className="fa-solid fa-check text-[10px] text-stayora-coral"></i>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-purple-100 flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Commute time:</span>
+                    <span className="font-extrabold text-emerald-600">
+                      {distance === 'under1km' ? '5 mins walk' : distance === 'under3km' ? '10 mins cycle' : '15 mins bus'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 3. Essential Amenities Card */}
+                <div className="gsap-stagger-card p-6 rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-purple-100 text-stayora-purple flex items-center justify-center text-xl mb-4">
+                      <i className="fa-solid fa-wifi text-stayora-coral"></i>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Key Amenities</h3>
+                    <p className="text-xs text-gray-500 mt-1">Must-have facilities for daily student life</p>
+
+                    <div className="mt-5 flex flex-wrap gap-1.5">
+                      {[
+                        { name: "WiFi", label: "Fast WiFi" },
+                        { name: "Food", label: "Mess Food" },
+                        { name: "AC", label: "Air Conditioning" },
+                        { name: "Backup", label: "Power Backup" },
+                        { name: "Laundry", label: "Washing Machine" },
+                        { name: "Biometric", label: "Biometric Entry" }
+                      ].map((item) => (
+                        <button
+                          key={item.name}
+                          onClick={() => toggleAmenity(item.name)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                            amenityFilter.includes(item.name)
+                              ? 'bg-stayora-violet text-white shadow-sm'
+                              : 'bg-white text-gray-600 border border-gray-200 hover:border-stayora-violet'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-purple-100 flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Selected:</span>
+                    <span className="font-extrabold text-stayora-purple">{amenityFilter.length} filters applied</span>
+                  </div>
+                </div>
+
+                {/* 4. Roommate Personality & Vibe Card */}
+                <div className="gsap-stagger-card p-6 rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-purple-100 text-stayora-purple flex items-center justify-center text-xl mb-4">
+                      <i className="fa-solid fa-fingerprint text-stayora-violet"></i>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Roommate Persona</h3>
+                    <p className="text-xs text-gray-500 mt-1">Match sleeping rhythm & studying style</p>
+
+                    <div className="mt-5 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => setPersonality("earlybird")}
+                          className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center ${
+                            personality === "earlybird"
+                              ? 'bg-stayora-purple text-white'
+                              : 'bg-white text-gray-600 hover:bg-purple-50'
+                          }`}
+                        >
+                          🌅 Early Riser (6 AM)
+                        </button>
+                        <button
+                          onClick={() => setPersonality("nightowl")}
+                          className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center ${
+                            personality === "nightowl"
+                              ? 'bg-stayora-purple text-white'
+                              : 'bg-white text-gray-600 hover:bg-purple-50'
+                          }`}
+                        >
+                          🌙 Night Owl (2 AM)
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 pt-1">
+                        <button
+                          onClick={() => setStudyHabit("study")}
+                          className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center ${
+                            studyHabit === "study"
+                              ? 'bg-stayora-violet text-white'
+                              : 'bg-white text-gray-600 hover:bg-purple-50'
+                          }`}
+                        >
+                          📚 Study-Focused
+                        </button>
+                        <button
+                          onClick={() => setStudyHabit("social")}
+                          className={`py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center ${
+                            studyHabit === "social"
+                              ? 'bg-stayora-violet text-white'
+                              : 'bg-white text-gray-600 hover:bg-purple-50'
+                          }`}
+                        >
+                          🎮 Gamer / Social
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Live Compatibility Score Meter */}
+                  <div className="mt-4 pt-3 border-t border-purple-100 flex items-center justify-between">
+                    <div>
+                      <span className="block text-[10px] uppercase font-bold text-gray-400">Match Harmony</span>
+                      <span className="text-xs font-bold text-stayora-deep">AI Vibe Score</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-black text-stayora-coral">{calculateCompatibility()}%</span>
+                      <div className="w-10 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-stayora-violet to-stayora-coral transition-all duration-500" 
+                          style={{ width: `${calculateCompatibility()}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Preference Action Banner */}
+              <div className="mt-10 p-5 rounded-2xl bg-gradient-to-r from-stayora-purple via-stayora-deep to-stayora-violet text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-stayora-coral">
+                    <i className="fa-solid fa-sparkles"></i>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm sm:text-base">Found 24 hostels & 12 roommates matching these criteria!</h4>
+                    <p className="text-xs text-purple-200">Zero brokerage • Verified room visits anytime between 9 AM to 8 PM</p>
+                  </div>
+                </div>
+                <a 
+                  href="#hostels" 
+                  className="px-6 py-2.5 rounded-xl bg-stayora-coral hover:bg-stayora-coralhover text-white text-xs font-extrabold shadow-md hover:shadow-lg transition-all"
+                >
+                  View Matched Stays
+                </a>
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 6: FEATURED HOSTEL & ROOM CARDS                   */}
+          {/* ========================================================= */}
+          <section id="hostels" className="py-24 bg-stayora-bglight relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Section Header */}
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                  <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-stayora-lightlavender text-stayora-deep border border-purple-200">
+                    🏢 Handpicked Stays
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                    Featured Hostels & <span className="text-gradient-purple">Student Rooms</span>
+                  </h2>
+                  <p className="text-base text-gray-600 mt-2 max-w-xl">
+                    All listings are verified physically by our team with transparent rent, food menus, power backup, and warden contacts.
+                  </p>
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="flex items-center gap-2 mt-6 md:mt-0 p-1.5 bg-white rounded-2xl border border-purple-100 shadow-sm">
+                  {["All Stays", "Boys Hostels", "Girls Hostels", "Co-Living"].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveTab(category.toLowerCase().split(' ')[0])}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                        (category === "All Stays" && activeTab === "all") || (activeTab === category.toLowerCase().split(' ')[0])
+                          ? 'bg-stayora-purple text-white shadow-sm'
+                          : 'text-gray-600 hover:text-stayora-purple hover:bg-purple-50'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+                {HOSTEL_DATA.filter((hostel) => {
+                  if (activeTab === "all") return true;
+                  if (activeTab === "boys") return hostel.type.toLowerCase().includes("boys");
+                  if (activeTab === "girls") return hostel.type.toLowerCase().includes("girls");
+                  if (activeTab === "co-living") return hostel.type.toLowerCase().includes("co-living");
+                  return true;
+                }).map((hostel) => (
+                  <div 
+                    key={hostel.id}
+                    className="gsap-stagger-card group rounded-3xl bg-white border border-purple-100 hover:border-stayora-lavender shadow-sm hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col"
+                  >
+                    {/* Image Thumbnail with Badges */}
+                    <div className="relative h-52 overflow-hidden">
+                      <img 
+                        src={hostel.image} 
+                        alt={hostel.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                      
+                      {/* Top Badges */}
+                      <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs ${hostel.badgeColor} shadow-md`}>
+                        {hostel.tag}
+                      </span>
+
+                      {/* Sharing badge */}
+                      <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-stayora-dark text-xs font-bold shadow-md">
+                        {hostel.sharing}
+                      </span>
+
+                      {/* Distance pill on bottom of image */}
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-medium">
+                        <span className="flex items-center gap-1.5 drop-shadow">
+                          <i className="fa-solid fa-location-dot text-stayora-coral"></i>
+                          <span>{hostel.distance}</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Rating & Campus */}
+                        <div className="flex items-center justify-between text-xs mb-2">
+                          <span className="text-gray-500 font-semibold">{hostel.campus}</span>
+                          <span className="flex items-center gap-1 text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded-md">
+                            <i className="fa-solid fa-star text-[11px]"></i>
+                            <span>{hostel.rating}</span>
+                            <span className="text-gray-400 font-normal">({hostel.reviews})</span>
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-base font-bold text-gray-900 group-hover:text-stayora-violet transition-colors leading-snug">
+                          {hostel.title}
+                        </h3>
+
+                        {/* Amenities Chips */}
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {hostel.amenities.slice(0, 3).map((amenity, i) => (
+                            <span key={i} className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-purple-50 text-stayora-deep">
+                              ✓ {amenity}
+                            </span>
+                          ))}
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-gray-100 text-gray-600">
+                            +{hostel.amenities.length - 3} more
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Card Footer: Rent + CTA */}
+                      <div className="mt-5 pt-4 border-t border-purple-50 flex items-center justify-between">
+                        <div>
+                          <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Monthly Rent</p>
+                          <p className="text-xl font-black text-stayora-purple">
+                            {hostel.rent}
+                            <span className="text-xs font-normal text-gray-500">{hostel.period}</span>
+                          </p>
+                        </div>
+
+                        <a 
+                          href="mobile_simulator.html"
+                          className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-stayora-purple hover:bg-stayora-coral transition-colors shadow-sm flex items-center gap-1.5"
+                        >
+                          <span>Explore</span>
+                          <i className="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* View All CTAs */}
+              <div className="mt-12 text-center">
+                <a 
+                  href="mobile_simulator.html"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-sm text-stayora-purple bg-white border-2 border-stayora-cardborder hover:border-stayora-violet shadow-sm hover:shadow-md transition-all hover:scale-105"
+                >
+                  <i className="fa-solid fa-list-check text-stayora-violet"></i>
+                  <span>Browse All 85+ Verified Campuses Hostels</span>
+                </a>
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 7: ROOMMATE-MATCH CARDS WITH COMPATIBILITY %     */}
+          {/* ========================================================= */}
+          <section id="roommates-section" className="py-24 bg-white border-y border-purple-100 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Section Header */}
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-stayora-corallight text-stayora-coral border border-stayora-coral/30">
+                  💜 AI Vibe & Lifestyle Match
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                  Meet Compatible <span className="text-gradient-coral">Roommates</span>
+                </h2>
+                <p className="text-base text-gray-600 mt-3">
+                  Match with students from your college who share your study hours, sleep habits, food choices, and cleanliness standards before you sign any lease.
+                </p>
+              </div>
+
+              {/* Roommate Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {ROOMMATE_DATA.map((student) => {
+                  const isLiked = likedRoommates[student.id];
+
+                  return (
+                    <div 
+                      key={student.id}
+                      className="gsap-roommate-card relative rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender shadow-sm hover:shadow-card-hover transition-all duration-300 p-6 flex flex-col justify-between"
+                    >
+                      {/* Top Header with Avatar & Match Ring */}
+                      <div>
+                        <div className="flex items-start justify-between">
+                          <div className="relative">
+                            <img 
+                              src={student.avatar} 
+                              alt={student.name}
+                              className="w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-md"
+                            />
+                            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white" title="Active on Campus"></span>
+                          </div>
+
+                          {/* Match % Pill */}
+                          <div className="text-right">
+                            <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-stayora-corallight text-stayora-coral text-xs font-black shadow-sm">
+                              <i className="fa-solid fa-fire text-[11px]"></i>
+                              <span>{student.matchScore}% Match</span>
+                            </div>
+                            <span className="block text-[10px] text-gray-400 font-semibold mt-1">High Compatibility</span>
+                          </div>
+                        </div>
+
+                        {/* Student Name & College */}
+                        <div className="mt-4">
+                          <h3 className="text-lg font-extrabold text-gray-900 leading-tight">
+                            {student.name}
+                          </h3>
+                          <p className="text-xs font-semibold text-stayora-deep mt-0.5">
+                            {student.branch}
+                          </p>
+                          <p className="text-[11px] text-gray-500 font-medium">
+                            From: {student.hometown}
+                          </p>
+                        </div>
+
+                        {/* Key Habit Badges */}
+                        <div className="mt-4 space-y-2">
+                          <div className="flex items-center gap-2 text-xs font-semibold text-gray-700 bg-white p-2 rounded-xl border border-purple-50">
+                            <i className="fa-regular fa-clock text-stayora-violet"></i>
+                            <span>{student.sleepCycle}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs font-semibold text-gray-700 bg-white p-2 rounded-xl border border-purple-50">
+                            <i className="fa-solid fa-graduation-cap text-stayora-coral"></i>
+                            <span>{student.lifestyle}</span>
+                          </div>
+                        </div>
+
+                        {/* Bio quote */}
+                        <p className="mt-3 text-xs text-gray-600 italic line-clamp-2">
+                          "{student.bio}"
+                        </p>
+
+                        {/* Tag Pills */}
+                        <div className="mt-3 flex flex-wrap gap-1">
+                          {student.tags.slice(0, 3).map((tag, idx) => (
+                            <span key={idx} className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-purple-100 text-stayora-purple">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Card Footer: Connect & Heart Interaction */}
+                      <div className="mt-6 pt-4 border-t border-purple-100 flex items-center gap-2">
+                        <button
+                          onClick={() => handleLikeRoommate(student.id, student.name)}
+                          className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${
+                            isLiked 
+                              ? 'bg-rose-500 text-white scale-110 shadow-md shadow-rose-500/30' 
+                              : 'bg-white text-gray-400 hover:text-rose-500 hover:bg-rose-50 border border-purple-100'
+                          }`}
+                          aria-label="Send roommate connect request"
+                          title={isLiked ? "Connect Request Sent!" : "Tap to Connect"}
+                        >
+                          <i className={`fa-heart ${isLiked ? 'fa-solid' : 'fa-regular'} text-base`}></i>
+                        </button>
+
+                        <a 
+                          href="mobile_simulator.html"
+                          className="flex-1 py-2.5 rounded-2xl font-bold text-xs text-center text-stayora-purple bg-stayora-lightlavender hover:bg-stayora-purple hover:text-white transition-all duration-200"
+                        >
+                          View Profile & Chat
+                        </a>
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Safety Note on Roommate Matching */}
+              <div className="mt-10 p-4 rounded-2xl bg-stayora-bglight border border-purple-200 text-center text-xs text-gray-600 max-w-2xl mx-auto flex items-center justify-center gap-2">
+                <i className="fa-solid fa-lock text-stayora-coral"></i>
+                <span>All student profiles verify university IDs before initiating one-to-one chats. Your phone number is kept private until mutual agreement.</span>
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 8: HOW IT WORKS (3 SIMPLE STEPS)                  */}
+          {/* ========================================================= */}
+          <section id="how-it-works" className="py-24 bg-stayora-bglight relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Header */}
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-stayora-lightlavender text-stayora-deep border border-purple-200">
+                  ⚡ Simple & Transparent
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                  How Stayora <span className="text-gradient-purple">Works For You</span>
+                </h2>
+                <p className="text-base text-gray-600 mt-3">
+                  Say goodbye to pushy brokers and chaotic WhatsApp groups. Get settled into your college room in three easy steps.
+                </p>
+              </div>
+
+              {/* 3 Step Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                
+                {/* Connecting Line for desktop */}
+                <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-stayora-lavender via-stayora-coral to-stayora-violet -translate-y-8 z-0"></div>
+
+                {/* Step 1 */}
+                <div className="gsap-step-card relative z-10 p-8 rounded-3xl bg-white border border-purple-100 shadow-sm hover:shadow-card-hover transition-all duration-300 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-stayora-purple text-white flex items-center justify-center text-2xl shadow-lg shadow-stayora-purple/25 mb-6 relative">
+                    <i className="fa-solid fa-sliders text-stayora-coral"></i>
+                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-stayora-coral text-white text-xs font-black flex items-center justify-center border-2 border-white">
+                      1
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Set Your Preferences</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Tell us your university, preferred distance, maximum budget, and lifestyle habits like sleep timings and study focus.
+                  </p>
+                  <div className="mt-4 px-3 py-1 rounded-full bg-purple-50 text-[11px] font-bold text-stayora-deep">
+                    Takes under 60 seconds
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="gsap-step-card relative z-10 p-8 rounded-3xl bg-white border border-purple-100 shadow-sm hover:shadow-card-hover transition-all duration-300 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-stayora-deep text-white flex items-center justify-center text-2xl shadow-lg shadow-stayora-deep/25 mb-6 relative">
+                    <i className="fa-solid fa-magnifying-glass-location text-stayora-softlavender"></i>
+                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-stayora-coral text-white text-xs font-black flex items-center justify-center border-2 border-white">
+                      2
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Browse Stays & Vibe Matches</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Compare verified hostels with transparent rent and curfew rules, or match with students who share high compatibility scores.
+                  </p>
+                  <div className="mt-4 px-3 py-1 rounded-full bg-purple-50 text-[11px] font-bold text-stayora-deep">
+                    100% physically audited
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="gsap-step-card relative z-10 p-8 rounded-3xl bg-white border border-purple-100 shadow-sm hover:shadow-card-hover transition-all duration-300 flex flex-col items-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-stayora-coral text-white flex items-center justify-center text-2xl shadow-lg shadow-stayora-coral/25 mb-6 relative">
+                    <i className="fa-solid fa-key text-white"></i>
+                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-stayora-purple text-white text-xs font-black flex items-center justify-center border-2 border-white">
+                      3
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Direct Chat & Move In</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Chat directly with property wardens or prospective roommates, book a free visit, and confirm your room with zero broker cut.
+                  </p>
+                  <div className="mt-4 px-3 py-1 rounded-full bg-stayora-corallight text-[11px] font-bold text-stayora-coral">
+                    Zero Brokerage Guaranteed
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 9: SAFETY, VERIFIED & NEARBY ESSENTIALS (HOSPITAL, BUS, PHARMACY) */}
+          {/* ========================================================= */}
+          <section id="safety" className="py-24 bg-white border-y border-purple-100 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Header */}
+              <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16">
+                <div>
+                  <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    🛡️ Verified Student Safety
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                    Campus Proximity & <span className="text-gradient-purple">Emergency Essentials</span>
+                  </h2>
+                  <p className="text-base text-gray-600 mt-2 max-w-2xl">
+                    Every Stayora listing is mapped to nearby 24/7 hospitals, bus stops, police outposts, and pharmacies so students and parents have complete peace of mind.
+                  </p>
+                </div>
+
+                {/* Emergency Contact Quick Action */}
+                <div className="mt-6 lg:mt-0 flex items-center gap-3">
+                  <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-base">
+                      <i className="fa-solid fa-phone-volume"></i>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-rose-600">24/7 Campus Emergency</p>
+                      <p className="text-sm font-black text-gray-900">+91 040-2379-2000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Essentials Grid (Hospital, Bus, Pharmacy, etc.) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {ESSENTIALS_DATA.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="gsap-stagger-card p-6 rounded-3xl bg-stayora-bglight border border-purple-100 hover:border-stayora-lavender shadow-sm hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center text-xl`}>
+                          <i className={`fa-solid ${item.icon}`}></i>
+                        </div>
+                        <div className="text-right">
+                          <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white text-stayora-deep border border-purple-100 shadow-sm">
+                            📍 {item.distance}
+                          </span>
+                          <span className="block text-[10px] text-gray-400 font-semibold mt-1">{item.time}</span>
+                        </div>
+                      </div>
+
+                      <span className="text-[11px] uppercase font-bold tracking-wider text-stayora-violet">
+                        {item.category}
+                      </span>
+                      <h3 className="text-base font-bold text-gray-900 mt-1 leading-snug">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-gray-600 mt-2 leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                    <div className="mt-5 pt-3 border-t border-purple-100 flex items-center justify-between text-xs">
+                      <span className="font-extrabold text-emerald-700 flex items-center gap-1">
+                        <i className="fa-solid fa-circle-check text-xs"></i>
+                        <span>{item.badge}</span>
+                      </span>
+                      <span className="text-gray-400 font-medium">Mapped on App</span>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+
+              {/* Physical Audit Assurance Badge */}
+              <div className="mt-12 p-6 rounded-3xl bg-gradient-to-r from-purple-50 via-stayora-lightlavender/40 to-pink-50 border border-purple-200/80 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-stayora-purple text-white flex items-center justify-center text-2xl flex-shrink-0 shadow-md">
+                    <i className="fa-solid fa-clipboard-check text-stayora-coral"></i>
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-gray-900 text-base">The Stayora 6-Point Physical Verification Check</h4>
+                    <p className="text-xs text-gray-600 mt-1">
+                      1. Fire exits & extinguishers • 2. CCTV coverage in common areas • 3. Purified RO water certification • 4. Background-verified wardens • 5. Generator power backup test • 6. Verified lease agreement.
+                    </p>
+                  </div>
+                </div>
+
+                <a 
+                  href="mobile_simulator.html"
+                  className="px-6 py-3 rounded-full text-xs font-extrabold text-white bg-stayora-purple hover:bg-stayora-deep whitespace-nowrap shadow-sm"
+                >
+                  Verify Your Stay
+                </a>
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 10: REAL STUDENT TESTIMONIALS                     */}
+          {/* ========================================================= */}
+          <section id="testimonials" className="py-24 bg-stayora-bglight relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              {/* Header */}
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-stayora-lightlavender text-stayora-deep border border-purple-200">
+                  💬 Student Experiences
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-stayora-dark mt-3 tracking-tight">
+                  Loved by Students from <span className="text-gradient-purple">Maisammaguda to Kompally</span>
+                </h2>
+                <p className="text-base text-gray-600 mt-3">
+                  Read genuine reviews from engineering, pharmacy, and management students who found their homes and roommates on Stayora.
+                </p>
+              </div>
+
+              {/* Testimonials Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {TESTIMONIALS.map((review) => (
+                  <div 
+                    key={review.id}
+                    className="gsap-stagger-card p-8 rounded-3xl bg-white border border-purple-100 hover:border-stayora-lavender shadow-sm hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Rating & Tag */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex text-amber-400 gap-1 text-xs">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <i key={i} className="fa-solid fa-star"></i>
+                          ))}
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-stayora-corallight text-stayora-coral">
+                          {review.tag}
+                        </span>
+                      </div>
+
+                      {/* Quote */}
+                      <p className="text-sm text-gray-700 leading-relaxed italic">
+                        "{review.text}"
+                      </p>
+                    </div>
+
+                    {/* Author Profile */}
+                    <div className="mt-6 pt-4 border-t border-purple-50 flex items-center gap-3">
+                      <img 
+                        src={review.avatar} 
+                        alt={review.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-stayora-violet/30"
+                      />
+                      <div>
+                        <h4 className="text-sm font-extrabold text-gray-900 leading-tight">{review.name}</h4>
+                        <p className="text-xs text-stayora-violet font-semibold">{review.role}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 11: STATS COUNTERS + CALL TO ACTION + FOOTER      */}
+          {/* ========================================================= */}
+          {/* Live Dynamic Stats Banner */}
+          <section id="stats-section" className="py-16 bg-stayora-purple text-white relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#8B5CF6_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                
+                {/* Counter 1 */}
+                <div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-stayora-coral">
+                    <span className="gsap-stat-counter" data-target="4850">0</span>+
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-stayora-lightlavender uppercase tracking-wider mt-1">
+                    Students Accommodated
+                  </p>
+                  <p className="text-[11px] text-purple-300 mt-0.5">Malla Reddy & Local Campuses</p>
+                </div>
+
+                {/* Counter 2 */}
+                <div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-white">
+                    <span className="gsap-stat-counter" data-target="85">0</span>+
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-stayora-lightlavender uppercase tracking-wider mt-1">
+                    Verified Hostels & PGs
+                  </p>
+                  <p className="text-[11px] text-purple-300 mt-0.5">Physical Audit Approved</p>
+                </div>
+
+                {/* Counter 3 */}
+                <div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-stayora-softlavender">
+                    <span className="gsap-stat-counter" data-target="98">0</span>%
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-stayora-lightlavender uppercase tracking-wider mt-1">
+                    Roommate Harmony Rate
+                  </p>
+                  <p className="text-[11px] text-purple-300 mt-0.5">Based on 6-Month Stay Data</p>
+                </div>
+
+                {/* Counter 4 */}
+                <div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-stayora-coral">
+                    ₹0
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-stayora-lightlavender uppercase tracking-wider mt-1">
+                    Brokerage Paid Ever
+                  </p>
+                  <p className="text-[11px] text-purple-300 mt-0.5">100% Direct Student-Owner</p>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* Strong Final CTA Card */}
+          <section className="py-20 bg-stayora-bglight relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="relative rounded-[40px] bg-gradient-to-tr from-stayora-dark via-stayora-purple to-stayora-deep p-8 sm:p-14 text-white overflow-hidden shadow-2xl shadow-purple-950/20">
+                
+                {/* Background ambient orbs */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-stayora-coral/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-stayora-violet/30 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
+                  <span className="px-4 py-1.5 rounded-full text-xs font-extrabold bg-white/10 text-stayora-corallight border border-white/20">
+                    🚀 Ready to find your college crew?
+                  </span>
+
+                  <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                    Find your vibe. <span className="text-gradient-coral">Find your stay.</span>
+                  </h2>
+
+                  <p className="text-base sm:text-lg text-purple-200 max-w-xl">
+                    Whether you are an incoming 1st year fresher or looking to upgrade your room with better food and high-speed Wi-Fi, Stayora makes campus living effortless.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full justify-center">
+                    <a 
+                      href="mobile_simulator.html"
+                      className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-extrabold bg-stayora-coral hover:bg-stayora-coralhover text-white shadow-lg shadow-stayora-coral/40 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                    >
+                      <i className="fa-solid fa-mobile-screen"></i>
+                      <span>Launch Stayora App</span>
+                    </a>
+
+                    <a 
+                      href="#preferences"
+                      className="w-full sm:w-auto px-8 py-4 rounded-full text-base font-extrabold bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md hover:scale-105 transition-all flex items-center justify-center gap-2"
+                    >
+                      <i className="fa-solid fa-sliders"></i>
+                      <span>Take Compatibility Quiz</span>
+                    </a>
+                  </div>
+
+                  <p className="text-xs text-purple-300 mt-2">
+                    Instant access • No credit card required • Built exclusively for students
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="bg-stayora-dark text-white border-t border-purple-900/60 pt-16 pb-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-purple-900/40">
+                
+                {/* Brand Column */}
+                <div className="lg:col-span-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-stayora-purple border border-stayora-lavender/40 flex items-center justify-center text-white text-base">
+                      <i className="fa-solid fa-hotel text-stayora-coral"></i>
+                    </div>
+                    <span className="text-2xl font-black text-white">
+                      Stay<span className="text-stayora-coral">ora</span>
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-4 leading-relaxed max-w-sm">
+                    Hyderabad's dedicated student living & roommate discovery platform. Eliminating broker exploitation through transparent reviews, physical hostel audits, and AI lifestyle matching.
+                  </p>
+
+                  <div className="flex items-center gap-3 mt-6">
+                    <a href="#" className="w-9 h-9 rounded-full bg-white/5 hover:bg-stayora-violet text-gray-400 hover:text-white flex items-center justify-center text-sm transition-colors">
+                      <i className="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-full bg-white/5 hover:bg-stayora-violet text-gray-400 hover:text-white flex items-center justify-center text-sm transition-colors">
+                      <i className="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-full bg-white/5 hover:bg-stayora-violet text-gray-400 hover:text-white flex items-center justify-center text-sm transition-colors">
+                      <i className="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="#" className="w-9 h-9 rounded-full bg-white/5 hover:bg-stayora-violet text-gray-400 hover:text-white flex items-center justify-center text-sm transition-colors">
+                      <i className="fa-brands fa-github"></i>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Column 2: Quick Links */}
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Discover Stays</h4>
+                  <ul className="space-y-2 text-xs text-gray-400 font-medium">
+                    <li><a href="#hostels" className="hover:text-stayora-coral transition-colors">Boys Hostels in Maisammaguda</a></li>
+                    <li><a href="#hostels" className="hover:text-stayora-coral transition-colors">Girls Hostels with Wardens</a></li>
+                    <li><a href="#hostels" className="hover:text-stayora-coral transition-colors">Private AC Rooms & Flats</a></li>
+                    <li><a href="#hostels" className="hover:text-stayora-coral transition-colors">Budget Hostels under ₹6k</a></li>
+                    <li><a href="#hostels" className="hover:text-stayora-coral transition-colors">Co-Living Hubs near Kompally</a></li>
+                  </ul>
+                </div>
+
+                {/* Column 3: Campus Clusters */}
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Campus Hubs</h4>
+                  <ul className="space-y-2 text-xs text-gray-400 font-medium">
+                    <li><span className="text-gray-300">Malla Reddy Univ (MRU)</span></li>
+                    <li><span className="text-gray-300">Malla Reddy Engg College (MREC)</span></li>
+                    <li><span className="text-gray-300">MLR Institute of Technology</span></li>
+                    <li><span className="text-gray-300">Institute of Aeronautical Engg (IARE)</span></li>
+                    <li><span className="text-gray-300">St. Martin's Engg College</span></li>
+                    <li><span className="text-gray-300">CMR Group of Institutions</span></li>
+                  </ul>
+                </div>
+
+                {/* Column 4: Student Safety & Trust */}
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Safety & Trust</h4>
+                  <ul className="space-y-2 text-xs text-gray-400 font-medium">
+                    <li><a href="#safety" className="hover:text-stayora-coral transition-colors">Physical Audit Policy</a></li>
+                    <li><a href="#safety" className="hover:text-stayora-coral transition-colors">Nearby Hospitals & Care</a></li>
+                    <li><a href="#safety" className="hover:text-stayora-coral transition-colors">Report Fake Listings</a></li>
+                    <li><a href="#safety" className="hover:text-stayora-coral transition-colors">Zero Brokerage Guarantee</a></li>
+                    <li><a href="#safety" className="hover:text-stayora-coral transition-colors">Warden Verification Portal</a></li>
+                  </ul>
+                </div>
+
+              </div>
+
+              {/* Bottom Copyright & Hackathon Tag */}
+              <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+                <p>© {new Date().getFullYear()} Stayora Technologies. All rights reserved.</p>
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 rounded-full bg-stayora-coral"></span>
+                  <span>Crafted with 💜 for Malla Reddy Hackathon 2026</span>
+                </div>
+              </div>
+
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    // Render the React Landing Page to #root
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+</body>
+</html>

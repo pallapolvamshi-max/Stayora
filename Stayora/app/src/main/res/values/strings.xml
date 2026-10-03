@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Stayora</string>
+    <string name="tagline">Smart Student Rentals &amp; Roommates</string>
+    <string name="search_hint">Search near Malla Reddy, Maisammaguda, Kompally...</string>
+</resources>

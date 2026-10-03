@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Stayora — Student Rental & Roommate Discovery App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="desktop-wrapper">
+    <!-- Desktop Left Showcase Panel -->
+    <aside class="showcase-sidebar">
+      <div class="brand-pill">
+        <span class="sparkle">✨</span> Malla Reddy Hackathon Edition
+      </div>
+      <h1 class="hero-title">Stayora <span>Mobile</span></h1>
+      <p class="hero-desc">
+        Smart student rental discovery & roommate compatibility app built with Kotlin & Jetpack Compose aesthetics.
+      </p>
+
+      <div class="features-checklist">
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>1. Onboarding & Preferences</strong>
+            <span>College, branch, roommate type, budget, sharing</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>2. Smart Recommendation Engine</strong>
+            <span>Match scores, curated hostels near campus</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>3. Search & Multi-Filters</strong>
+            <span>Rent, distance, gender, 2/4-sharing, amenities</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>4. Transparent Property Details</strong>
+            <span>Rent, deposit, rules, curfews, security & warden</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>5. Side-by-Side Comparison</strong>
+            <span>Compare up to 3 hostels across pricing & amenities</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>6. Saved Shortlist</strong>
+            <span>One-tap bookmarking & easy comparison</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>7. Live Student-Owner Chat</strong>
+            <span>Inquiry chips with instant realistic replies</span>
+          </div>
+        </div>
+        <div class="check-item active">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>8. Nearby Facilities & Essentials</strong>
+            <span>Hospitals, TSRTC bus stops, pharmacies, metro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="toggle-frame-btn" class="secondary-btn">
+          <i class="fa-solid fa-mobile-screen"></i> Toggle Fullscreen / Phone Frame
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Device Simulator Frame -->
+    <main class="device-container" id="device-container">
+      <div class="mobile-frame">
+        <!-- Phone Speaker & Camera Notch -->
+        <div class="device-notch">
+          <div class="speaker"></div>
+          <div class="camera"></div>
+        </div>
+
+        <!-- Phone Status Bar -->
+        <div class="status-bar">
+          <span class="status-time" id="status-clock">09:41</span>
+          <div class="status-icons">
+            <i class="fa-solid fa-signal"></i>
+            <i class="fa-solid fa-wifi"></i>
+            <i class="fa-solid fa-battery-full"></i>
+          </div>
+        </div>
+
+        <!-- App View Container -->
+        <div class="app-screen-viewport" id="app-viewport">
+          <!-- Views rendered by app.js:
+               - Onboarding View
+               - Home View
+               - Search View
+               - Property Detail View
+               - Compare View
+               - Favorites View
+               - Chat View
+               - Nearby Facilities View
+               - Roommates View
+          -->
+        </div>
+
+        <!-- Android Navigation Bar (Bottom) -->
+        <nav class="bottom-nav-bar" id="bottom-nav-bar">
+          <button class="nav-tab active" data-tab="home">
+            <i class="fa-solid fa-compass"></i>
+            <span>Explore</span>
+          </button>
+          <button class="nav-tab" data-tab="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+          </button>
+          <button class="nav-tab" data-tab="roommates">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Roommates</span>
+          </button>
+          <button class="nav-tab" data-tab="favorites">
+            <i class="fa-solid fa-heart"></i>
+            <span>Saved</span>
+          </button>
+          <button class="nav-tab" data-tab="compare">
+            <div class="icon-badge-wrapper">
+              <i class="fa-solid fa-arrow-right-arrow-left"></i>
+              <span class="badge" id="compare-badge" style="display: none;">0</span>
+            </div>
+            <span>Compare</span>
+          </button>
+        </nav>
+
+        <!-- Home Indicator bar -->
+        <div class="home-indicator"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

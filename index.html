@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stayora — Pitch Deck Presentation | Malla Reddy Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            stayora: {
+              dark: '#14032F',
+              purple: '#250065',
+              deep: '#3B1E7E',
+              violet: '#6B38D4',
+              lavender: '#8B5CF6',
+              lightlavender: '#EDE9FE',
+              coral: '#FF6B4A',
+              cardborder: '#E8DCFC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @page {
+      size: 1920px 1080px;
+      margin: 0;
+    }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .slide { page-break-after: always; height: 100vh !important; }
+      .no-print { display: none !important; }
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      min-height: 1080px;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 80px;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-[#FAF7FF] text-[#14032F] font-sans">
+
+  <!-- ==================== SLIDE 1: COVER ==================== -->
+  <section class="slide bg-gradient-to-br from-[#14032F] via-[#250065] to-[#3B1E7E] text-white">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
+          <i class="fa-solid fa-house-chimney text-2xl text-[#FF6B4A]"></i>
+        </div>
+        <span class="text-3xl font-black tracking-wider text-white">STAYORA</span>
+      </div>
+      <div class="px-5 py-2 rounded-full bg-white/10 border border-white/20 text-sm font-semibold tracking-wide text-[#EDE9FE]">
+        🏆 Malla Reddy Hackathon 2026
+      </div>
+    </div>
+
+    <div class="my-auto max-w-4xl">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FF6B4A]/20 border border-[#FF6B4A]/40 text-[#FF6B4A] font-bold text-sm mb-6">
+        ✨ Smart Student Accommodation & Roommate Discovery Platform
+      </div>
+      <h1 class="text-7xl font-black leading-tight tracking-tight mb-6">
+        Find Your Space.<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#EDE9FE] via-[#C4B5FD] to-[#FF6B4A]">Find Your People.</span>
+      </h1>
+      <p class="text-2xl text-purple-200 font-normal leading-relaxed max-w-2xl">
+        AI-powered compatibility matching, warden-verified hostels, transparent curfews, and zero-brokerage student living tailored for college campuses.
+      </p>
+    </div>
+
+    <div class="flex items-center justify-between border-t border-white/10 pt-6 text-sm text-purple-200">
+      <div>
+        <span class="text-white/60">Focus Region:</span> Maisammaguda, Dulapally & Kompally Campus Clusters
+      </div>
+      <div>
+        <span class="text-white/60">Platform:</span> Native Android (Jetpack Compose) + GSAP Web Experience
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: PROBLEM STATEMENT ==================== -->
+  <section class="slide bg-[#FAF7FF]">
+    <div class="flex items-center justify-between border-b border-purple-100 pb-5">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#8B5CF6]">The Challenge</div>
+        <h2 class="text-4xl font-black text-[#14032F]">The Broken Student Accommodation Reality</h2>
+      </div>
+      <div class="text-sm font-bold text-gray-400">02 / 07</div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-6 my-auto">
+      <div class="p-8 rounded-3xl bg-white border border-red-100 shadow-xl shadow-red-500/5 flex flex-col justify-between">
+        <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-2xl mb-6">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-extrabold mb-3 text-gray-900">Extortionate Brokerage</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Local brokers charge 15-30 days rent as non-refundable brokerage fees with zero accountability or post-checkin support.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-red-50 text-xs font-bold text-red-600">Avg ₹4,000 - ₹8,000 lost per student</div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white border border-amber-100 shadow-xl shadow-amber-500/5 flex flex-col justify-between">
+        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl mb-6">
+          <i class="fa-solid fa-people-robbery"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-extrabold mb-3 text-gray-900">Toxic Roommate Mismatch</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Random hostel room allocation creates friction: early risers paired with 3 AM gamers, study-focused with loud partyers.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-amber-50 text-xs font-bold text-amber-600">68% students change rooms in 1st year</div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white border border-purple-100 shadow-xl shadow-purple-500/5 flex flex-col justify-between">
+        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-6">
+          <i class="fa-solid fa-image-slash"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-extrabold mb-3 text-gray-900">Misleading Photos & Food</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Outdated Google Map photos, hidden electricity surcharges, and deceptive food/mess claims with no transparent reviews.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-purple-50 text-xs font-bold text-purple-600">Zero standardized quality checks</div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white border border-blue-100 shadow-xl shadow-blue-500/5 flex flex-col justify-between">
+        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-6">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-extrabold mb-3 text-gray-900">Safety & Curfew Anxiety</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Parents lack visibility on female security guards, biometric gates, warden presence, and campus transit timings.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-blue-50 text-xs font-bold text-blue-600">Major concern for outstation parents</div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-purple-100 pt-4">
+      <span>Stayora Pitch Deck — Problem Statement</span>
+      <span>Empirical student survey across Maisammaguda campus belt</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: OUR SOLUTION ==================== -->
+  <section class="slide bg-[#FAF7FF]">
+    <div class="flex items-center justify-between border-b border-purple-100 pb-5">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#8B5CF6]">The Innovation</div>
+        <h2 class="text-4xl font-black text-[#14032F]">The Stayora Solution & Value Pillars</h2>
+      </div>
+      <div class="text-sm font-bold text-gray-400">03 / 07</div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-8 my-auto">
+      <div class="p-8 rounded-3xl bg-gradient-to-br from-white to-[#EDE9FE]/40 border border-[#8B5CF6]/30 shadow-xl">
+        <div class="w-16 h-16 rounded-2xl bg-[#250065] text-white flex items-center justify-center text-2xl mb-6 shadow-lg shadow-purple-900/20">
+          <i class="fa-solid fa-dna"></i>
+        </div>
+        <h3 class="text-2xl font-black text-[#14032F] mb-3">Roommate Compatibility Engine</h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-6">
+          Algorithmic multi-factor scoring matching students by:
+        </p>
+        <ul class="space-y-2 text-xs font-bold text-gray-700">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Same College & Academic Branch</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Hometown / Mother Tongue affinity</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Sleep rhythm (Night Owl vs Early Riser)</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Dietary (Pure Veg / Mess preferences)</li>
+        </ul>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-gradient-to-br from-white to-[#FFE8E3]/40 border border-[#FF6B4A]/30 shadow-xl">
+        <div class="w-16 h-16 rounded-2xl bg-[#FF6B4A] text-white flex items-center justify-center text-2xl mb-6 shadow-lg shadow-orange-500/20">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 class="text-2xl font-black text-[#14032F] mb-3">100% Physical Warden Verified</h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-6">
+          Zero fake listings. Every property verified physically:
+        </p>
+        <ul class="space-y-2 text-xs font-bold text-gray-700">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Lady/Gent Resident Warden Verified</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Biometric gate & curfew transparency</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> High-resolution real bedroom photos</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Exact distance to campus gate (walking min)</li>
+        </ul>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-gradient-to-br from-white to-[#EDE9FE]/40 border border-[#8B5CF6]/30 shadow-xl">
+        <div class="w-16 h-16 rounded-2xl bg-[#6B38D4] text-white flex items-center justify-center text-2xl mb-6 shadow-lg shadow-purple-900/20">
+          <i class="fa-solid fa-code-compare"></i>
+        </div>
+        <h3 class="text-2xl font-black text-[#14032F] mb-3">Comparison & Direct Chat</h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-6">
+          Total autonomy and decision intelligence for students:
+        </p>
+        <ul class="space-y-2 text-xs font-bold text-gray-700">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Side-by-side comparison across 3 stays</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Zero Brokerage — Direct Warden Chat</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Verified nearby essentials (Hospitals, Metro)</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Transparent security deposit policies</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-purple-100 pt-4">
+      <span>Stayora Pitch Deck — Solution Architecture</span>
+      <span>Empowering over 50,000+ campus students with dignified accommodation</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: PRODUCT SCREENS ==================== -->
+  <section class="slide bg-[#FAF7FF]">
+    <div class="flex items-center justify-between border-b border-purple-100 pb-5">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#8B5CF6]">Product Architecture</div>
+        <h2 class="text-4xl font-black text-[#14032F]">Implemented Mobile App Ecosystem</h2>
+      </div>
+      <div class="text-sm font-bold text-gray-400">04 / 07</div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-6 my-auto text-left">
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-3xl font-black text-[#250065] mb-2">01</div>
+        <h4 class="font-extrabold text-base text-gray-900 mb-2">Campus Landing & Reels</h4>
+        <p class="text-xs text-gray-600 leading-relaxed">
+          Interactive Boys & Girls hostel reels, real photographs, verified badges, and live budget slider.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-3xl font-black text-[#250065] mb-2">02</div>
+        <h4 class="font-extrabold text-base text-gray-900 mb-2">Smart Onboarding</h4>
+        <p class="text-xs text-gray-600 leading-relaxed">
+          Captures college, branch, sleep habits, diet, and hometown to dynamically customize matches.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-3xl font-black text-[#250065] mb-2">03</div>
+        <h4 class="font-extrabold text-base text-gray-900 mb-2">Roommate Spotlight</h4>
+        <p class="text-xs text-gray-600 leading-relaxed">
+          Peer cards with match percentages (e.g. 96%), habit chips (#NightOwl, #PureVeg), and connect requests.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-3xl font-black text-[#250065] mb-2">04</div>
+        <h4 class="font-extrabold text-base text-gray-900 mb-2">Compare & Chat</h4>
+        <p class="text-xs text-gray-600 leading-relaxed">
+          Side-by-side matrices of rent, deposit, curd food, curfew hours, and real-time chat with hostellers.
+        </p>
+      </div>
+    </div>
+
+    <div class="p-6 rounded-3xl bg-[#250065] text-white flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-code text-[#FF6B4A]"></i>
+        </div>
+        <div>
+          <div class="font-bold text-base">100% Native Jetpack Compose Codebase</div>
+          <div class="text-xs text-purple-200">121 Files committed on GitHub • Material 3 Theming • Zero XML Layouts</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30">
+          ✓ Verified on Device
+        </span>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-purple-100 pt-4">
+      <span>Stayora Pitch Deck — Product Tour</span>
+      <span>Tested live on Android API 34+ Virtual Device</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: TECH STACK ==================== -->
+  <section class="slide bg-[#FAF7FF]">
+    <div class="flex items-center justify-between border-b border-purple-100 pb-5">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#8B5CF6]">Engineering & Stack</div>
+        <h2 class="text-4xl font-black text-[#14032F]">Modern, Scalable Technology Stack</h2>
+      </div>
+      <div class="text-sm font-bold text-gray-400">05 / 07</div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-6 my-auto">
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-sm font-extrabold text-[#8B5CF6] mb-2 uppercase">Mobile Client</div>
+        <div class="text-2xl font-black text-gray-900 mb-4">Kotlin & Compose</div>
+        <ul class="space-y-2 text-xs text-gray-600 font-semibold">
+          <li>• Jetpack Compose Material 3</li>
+          <li>• Navigation Compose</li>
+          <li>• Coil 2.6.0 Image Caching</li>
+          <li>• Infinite Transitions & Animation</li>
+        </ul>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-sm font-extrabold text-[#8B5CF6] mb-2 uppercase">Architecture</div>
+        <div class="text-2xl font-black text-gray-900 mb-4">MVVM + StateFlow</div>
+        <ul class="space-y-2 text-xs text-gray-600 font-semibold">
+          <li>• Unidirectional Data Flow (UDF)</li>
+          <li>• Kotlin Coroutines</li>
+          <li>• Reactive Single Source of Truth</li>
+          <li>• Offline-Resilient Local Engine</li>
+        </ul>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-sm font-extrabold text-[#8B5CF6] mb-2 uppercase">Web Showcase</div>
+        <div class="text-2xl font-black text-gray-900 mb-4">React 18 + GSAP</div>
+        <ul class="space-y-2 text-xs text-gray-600 font-semibold">
+          <li>• GSAP 3 & ScrollTrigger</li>
+          <li>• Tailwind CSS Responsive Grid</li>
+          <li>• 3D Phone Mockup Simulation</li>
+          <li>• Interactive Preference Sliders</li>
+        </ul>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md">
+        <div class="text-sm font-extrabold text-[#8B5CF6] mb-2 uppercase">Algorithms</div>
+        <div class="text-2xl font-black text-gray-900 mb-4">Matching Heuristic</div>
+        <ul class="space-y-2 text-xs text-gray-600 font-semibold">
+          <li>• Multi-factor Compatibility Scorer</li>
+          <li>• Campus Proximity Weighing</li>
+          <li>• Curfew & Security Index</li>
+          <li>• Budget Tolerance Curve</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-purple-100 pt-4">
+      <span>Stayora Pitch Deck — Technology Architecture</span>
+      <span>Designed for zero runtime exceptions and sub-50ms render latency</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: MARKET & IMPACT ==================== -->
+  <section class="slide bg-[#FAF7FF]">
+    <div class="flex items-center justify-between border-b border-purple-100 pb-5">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#8B5CF6]">Market & Business</div>
+        <h2 class="text-4xl font-black text-[#14032F]">Campus Impact & Monetization Strategy</h2>
+      </div>
+      <div class="text-sm font-bold text-gray-400">06 / 07</div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-8 my-auto">
+      <div class="p-8 rounded-3xl bg-white border border-purple-100 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="text-4xl font-black text-[#250065] mb-2">50,000+</div>
+          <div class="text-sm font-bold text-gray-900 mb-3">Target Student Population</div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Malla Reddy University, MREC, MLRIT, IARE, CMR Group, and St. Martin's within a 5 km radius.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-purple-700 font-bold">
+          ₹120+ Cr Annual Accommodation Market
+        </div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white border border-purple-100 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="text-4xl font-black text-[#FF6B4A] mb-2">B2B SaaS</div>
+          <div class="text-sm font-bold text-gray-900 mb-3">Hostel Management Portal</div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Warden dashboard for verified badge verification, bed occupancy tracking, and automated parent SMS curfew alerts.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-orange-700 font-bold">
+          ₹999/mo per hostel subscription
+        </div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white border border-purple-100 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="text-4xl font-black text-[#8B5CF6] mb-2">Freemium</div>
+          <div class="text-sm font-bold text-gray-900 mb-3">Student Ecosystem</div>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            100% Free search, filters, and roommate matching for students. Premium campus luggage movers, mess cards, and Wi-Fi discounts.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-purple-700 font-bold">
+          High student retention & network effects
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between text-xs text-gray-500 border-t border-purple-100 pt-4">
+      <span>Stayora Pitch Deck — Business & Impact</span>
+      <span>Empowering local hostel owners and students transparently</span>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: LIVE DEMO & LINKS ==================== -->
+  <section class="slide bg-gradient-to-br from-[#14032F] via-[#250065] to-[#3B1E7E] text-white">
+    <div class="flex items-center justify-between border-b border-white/10 pb-5">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-rocket text-2xl text-[#FF6B4A]"></i>
+        <span class="text-2xl font-black tracking-wider text-white">READY FOR JURY EVALUATION</span>
+      </div>
+      <div class="text-sm font-bold text-purple-300">07 / 07</div>
+    </div>
+
+    <div class="my-auto max-w-4xl">
+      <h2 class="text-6xl font-black mb-6">
+        Thank You!<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#EDE9FE] via-[#C4B5FD] to-[#FF6B4A]">
+          Questions & Live Demo
+        </span>
+      </h2>
+      <p class="text-xl text-purple-200 mb-10 max-w-2xl leading-relaxed">
+        Experience Stayora live on device with active roommate matching, transparent hostel listings, and full real-time filtering.
+      </p>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md">
+          <div class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-1">GitHub Open Source Codebase</div>
+          <div class="text-lg font-bold text-white break-all">https://github.com/pallapolvamshi-max/stayora</div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md">
+          <div class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-1">Android Application Status</div>
+          <div class="text-lg font-bold text-emerald-400">✓ Compiled & Running on Emulator / Device</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between border-t border-white/10 pt-6 text-sm text-purple-300">
+      <div>Project: Stayora Student Accommodation</div>
+      <div>Malla Reddy University Hackathon 2026</div>
+    </div>
+  </section>
+
+</body>
+</html>

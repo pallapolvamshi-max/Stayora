@@ -28,7 +28,7 @@ fun CompatibilityBadge(
     label: String = "Match"
 ) {
     Row(
-        modifier = modifier   git --version
+        modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(PurpleTint)
             .padding(horizontal = 8.dp, vertical = 4.dp),
